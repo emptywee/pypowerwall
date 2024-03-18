@@ -62,58 +62,57 @@ After importing pypowerwall, you simply create a handle for your Powerwall devic
 and call function to poll data.  Here is an example:
 
 ```python
-    import pypowerwall
+import pypowerwall
 
-    # Optional: Turn on Debug Mode
-    # pypowerwall.set_debug(True)
+# Optional: Turn on Debug Mode
+# pypowerwall.set_debug(True)
 
-    # Local Mode - Credentials for your Powerwall - Customer Login
-    password='password'
-    email='email@example.com'
-    host = "10.0.1.123"               # Address of your Powerwall Gateway
-    timezone = "America/Los_Angeles"  # Your local timezone
+# Local Mode - Credentials for your Powerwall - Customer Login
+password='password'
+email='email@example.com'
+host = "10.0.1.123"               # Address of your Powerwall Gateway
+timezone = "America/Los_Angeles"  # Your local timezone
 
-    # (Optional) Cloud Mode - Requires Setup
-    password = ""
-    email='email@example.com'
-    host = ""
-    timezone = "America/Los_Angeles"  # Your local timezone
- 
-    # Connect to Powerwall
-    pw = pypowerwall.Powerwall(host,password,email,timezone)
+# (Optional) Cloud Mode - Requires Setup
+password = ""
+email='email@example.com'
+host = ""
+timezone = "America/Los_Angeles"  # Your local timezone
 
-    # Some System Info
-    print("Site Name: %s - Firmware: %s - DIN: %s" % (pw.site_name(), pw.version(), pw.din()))
-    print("System Uptime: %s\n" % pw.uptime())
+# Connect to Powerwall
+pw = pypowerwall.Powerwall(host,password,email,timezone)
 
-    # Pull Sensor Power Data
-    grid = pw.grid()
-    solar = pw.solar()
-    battery = pw.battery()
-    home = pw.home()
+# Some System Info
+print("Site Name: %s - Firmware: %s - DIN: %s" % (pw.site_name(), pw.version(), pw.din()))
+print("System Uptime: %s\n" % pw.uptime())
 
-    # Display Data
-    print("Battery power level: %0.0f%%" % pw.level())
-    print("Combined power metrics: %r" % pw.power())
-    print("")
+# Pull Sensor Power Data
+grid = pw.grid()
+solar = pw.solar()
+battery = pw.battery()
+home = pw.home()
 
-    # Display Power in kW
-    print("Grid Power: %0.2fkW" % (float(grid)/1000.0))
-    print("Solar Power: %0.2fkW" % (float(solar)/1000.0))
-    print("Battery Power: %0.2fkW" % (float(battery)/1000.0))
-    print("Home Power: %0.2fkW" % (float(home)/1000.0))
-    print("")
+# Display Data
+print("Battery power level: %0.0f%%" % pw.level())
+print("Combined power metrics: %r" % pw.power())
+print("")
 
-    # Raw JSON Payload Examples
-    print("Grid raw: %r\n" % pw.grid(verbose=True))
-    print("Solar raw: %r\n" % pw.solar(verbose=True))
+# Display Power in kW
+print("Grid Power: %0.2fkW" % (float(grid)/1000.0))
+print("Solar Power: %0.2fkW" % (float(solar)/1000.0))
+print("Battery Power: %0.2fkW" % (float(battery)/1000.0))
+print("Home Power: %0.2fkW" % (float(home)/1000.0))
+print("")
 
-    # Display Device Vitals
-    print("Vitals: %r\n" % pw.vitals())
+# Raw JSON Payload Examples
+print("Grid raw: %r\n" % pw.grid(verbose=True))
+print("Solar raw: %r\n" % pw.solar(verbose=True))
 
-    # Display String Data
-    print("String Data: %r\n" % pw.strings())
+# Display Device Vitals
+print("Vitals: %r\n" % pw.vitals())
 
+# Display String Data
+print("String Data: %r\n" % pw.strings())
 ```
 
 ### pyPowerwall Module Class and Functions 
@@ -122,7 +121,7 @@ and call function to poll data.  Here is an example:
 
  Classes
     Powerwall(host, password, email, timezone, pwcacheexpire, timeout, poolmaxsize, 
-              cloudmode, siteid, authpath, authmode)
+              cloudmode, siteid, authpath, authmode, cachefile)
 
  Parameters
     host                      # Hostname or IP of the Tesla gateway
@@ -137,6 +136,7 @@ and call function to poll data.  Here is an example:
     siteid                    # If cloudmode is True, use this siteid (default is None)  
     authpath                  # Path to cloud auth and site cache files (default is "")
     authmode = "cookie"       # "cookie" (default) or "token" - use cookie or bearer token for auth
+    cachefile = ".powerwall"  # Path to cache file (default current directory)
 
  Functions 
     poll(api, json, force)    # Return data from Powerwall api (dict if json=True, bypass cache force=True)
@@ -573,7 +573,13 @@ Firmware version of the Powerwall can be seen with `pw.version()`.
 | 23.12.11 452c76cb | 4-Aug-2023 | STSTSM firmware showing 2023-07-20-ga38210a892 | v0.6.2 Proxy t26 | 4.23.6-1844 |
 | 23.28.1 fa0c1ad0 | 11-Sep-2023 | STSTSM firmware showing 2023-08-22-g807640ca4a | v0.6.2 Proxy t26 | 4.24.5-1931 |
 | 23.28.2 27626f98 | 13-Oct-2023 | STSTSM firmware showing 2023-09-12-gafa2393b50 | v0.6.2 Proxy t26 | 4.25.6-1976 |
+| 23.36.3 aa269d353 | 22-Dec-2023 | STSTSM firmware showing 2023-11-30-g6e07d12eea | .. | .. |
+| 23.36.4 4064fc6a | 17-Jan-2024 | STSTSM firmware showing 2023-11-30-g6e07d12eea |  .. | .. |
+| 23.44.0 eb113390 | 25-Jan-2024 | STSTSM firmware showing Unknown - No vitals available |  .. | .. |
+| 23.44.3-msa | 7-Feb-2024 | No vitals available |  .. | .. |
+| 24.4.0 0fe780c9 | 15-Mar-2024 | No vitals available |  .. | .. |
 
+* Beginning with 23.44.0, Tesla has removed the /api/devices/vitals API endpoint. For discussion about this and future updates, see [Tesla Powerwall Firmware Upgrades - Observations](https://github.com/jasonacox/Powerwall-Dashboard/discussions/109).
 
 ### Devices and Alerts
 
